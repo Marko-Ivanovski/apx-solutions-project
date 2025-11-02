@@ -14,7 +14,10 @@ export function ResultsCard({ resume, onReset }: ResultsCardProps) {
         <div>
           <p className="text-xs uppercase tracking-wide text-emerald-600">Parsed successfully</p>
           <h2 className="mt-1 text-2xl font-semibold text-zinc-900">{resume.name}</h2>
-          <p className="text-sm text-zinc-500">{resume.email}</p>
+          <div className="mt-2 flex flex-col gap-1 text-sm text-zinc-500">
+            <span>{resume.email}</span>
+            <span>{resume.phone}</span>
+          </div>
         </div>
         {onReset ? (
           <button
@@ -48,6 +51,18 @@ export function ResultsCard({ resume, onReset }: ResultsCardProps) {
               </li>
             ))}
           </ul>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2 rounded-2xl bg-white/70 p-4 shadow-sm">
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-emerald-700">Projects</h3>
+        <div className="space-y-3 text-sm text-zinc-700">
+          {resume.projects.map((project) => (
+            <article key={`${project.title}-${project.summary}`} className="rounded-2xl border border-emerald-100 bg-white/80 p-3 shadow-sm">
+              <h4 className="text-sm font-semibold text-emerald-700">{project.title}</h4>
+              <p className="mt-1 text-sm leading-relaxed text-zinc-600">{project.summary}</p>
+            </article>
+          ))}
         </div>
       </div>
 
