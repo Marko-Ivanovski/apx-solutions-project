@@ -1,3 +1,5 @@
+import "@/lib/pdf-polyfills";
+
 export async function extractTextFromPdf(buffer: Buffer): Promise<string> {
   type PdfParseClass = {
     new (params: { data: Buffer }): {
@@ -9,7 +11,6 @@ export async function extractTextFromPdf(buffer: Buffer): Promise<string> {
 
   const { PDFParse } = (await import("pdf-parse")) as unknown as {
     PDFParse: PdfParseClass;
-    default?: never;
   };
 
   if (typeof PDFParse.setWorker === "function") {
@@ -21,9 +22,7 @@ export async function extractTextFromPdf(buffer: Buffer): Promise<string> {
   try {
     const textResult = await parser.getText();
     const cleaned = textResult.text.replace(/\s+/g, " ").trim();
-    if (!cleaned) {
-      throw new Error("Could not extract text from resume");
-    }
+    if (!cleaned) throw new Error("Could not extract text from resume");
     return cleaned;
   } finally {
     await parser.destroy().catch(() => undefined);
