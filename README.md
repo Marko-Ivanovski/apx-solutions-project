@@ -1,4 +1,4 @@
-# APX Resume Parser
+# APX Solutions Internship Resume Parser Project
 
 A Next.js 16 + TypeScript + Tailwind 4 web app that lets recruiters upload a resume PDF and instantly view structured candidate information. The backend extracts text server-side, sends it to Google’s Gemini API for parsing, validates the response with Zod, and renders clean cards for name, email, education, skills, and a short experience summary.
 
@@ -28,7 +28,6 @@ A Next.js 16 + TypeScript + Tailwind 4 web app that lets recruiters upload a res
 - `POST /api/parse` – multipart form-data with `file` (PDF). Returns structured resume JSON or a helpful error payload.
 
 ## Tests & Quality
-- `npm run lint` – type-aware ESLint
 - `npm run build` – Next.js production build
 
 ## Deployment
