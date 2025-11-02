@@ -1,4 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { jsonrepair } from "jsonrepair";
+
+const JSON_START = /[{[]/;
 import { assertResumePayload, ResumePayload } from "./schema";
 import { buildResumePrompt } from "./prompts";
 
@@ -85,12 +88,41 @@ export async function parseResumeWithGemini(resumeText: string): Promise<ResumeP
   });
 
   const output = response.response.text();
+  const normalizedOutput = extractJsonBlock(output);
+
   try {
-    const parsed = JSON.parse(extractJsonBlock(output));
+    const parsed = safeParseJson(normalizedOutput);
     return normalizeResumePayload(parsed);
   } catch (error) {
     throw new Error("Please try again with a Resume format.");
   }
+}
+
+function safeParseJson(payload: string) {
+  try {
+    return JSON.parse(payload);
+  } catch {
+    try {
+      const cleaned = stripNonJsonPrefix(payload);
+      const repaired = jsonrepair(cleaned);
+      return JSON.parse(repaired);
+    } catch {
+      throw new Error("Unable to parse structured resume data.");
+    }
+  }
+}
+
+function stripNonJsonPrefix(payload: string): string {
+  const trimmed = payload.trim();
+  if (JSON_START.test(trimmed[0] ?? "")) {
+    return trimmed;
+  }
+
+  const startIndex = trimmed.search(JSON_START);
+  if (startIndex === -1) {
+    return trimmed;
+  }
+  return trimmed.slice(startIndex);
 }
 
 function normalizeResumePayload(raw: unknown): ResumePayload {

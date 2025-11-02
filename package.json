@@ -12,6 +12,7 @@
         "@google/generative-ai": "^0.24.1",
         "@napi-rs/canvas": "^0.1.81",
         "@types/pdf-parse": "^1.1.5",
+        "jsonrepair": "^3.13.1",
         "next": "16.0.1",
         "pdf-parse": "^1.1.1",
         "react": "19.2.0",
