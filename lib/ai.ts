@@ -12,10 +12,8 @@ function extractJsonBlock(raw: string): string {
   }
 
   const lines = trimmed.split("\n");
-  // Drop opening fence
   lines.shift();
 
-  // Remove closing fence if present
   const closingIndex = lines.findIndex((line) => line.trim().startsWith("```"));
   if (closingIndex !== -1) {
     lines.splice(closingIndex);
@@ -63,6 +61,6 @@ export async function parseResumeWithGemini(resumeText: string): Promise<ResumeP
     const parsed = JSON.parse(extractJsonBlock(output));
     return assertResumePayload(parsed);
   } catch (error) {
-    throw new Error("Gemini returned invalid JSON. Please try again with a clearer resume.");
+    throw new Error("Please try again with a Resume format.");
   }
 }
