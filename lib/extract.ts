@@ -1,4 +1,14 @@
 export async function extractTextFromPdf(buffer: Buffer): Promise<string> {
+  const globalWithPath2D = globalThis as { Path2D?: new (path?: string) => unknown };
+
+  if (typeof globalWithPath2D.Path2D === "undefined") {
+    class Path2DPolyfill {
+      constructor(_: string | undefined = undefined) {}
+    }
+
+    globalWithPath2D.Path2D = Path2DPolyfill;
+  }
+
   type PdfParseClass = {
     new (params: { data: Buffer }): {
       getText: () => Promise<{ text: string }>;
